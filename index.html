@@ -27,7 +27,6 @@
         body { 
             font-family: 'Sarabun', sans-serif; 
             -webkit-tap-highlight-color: transparent; 
-            /* Animated Background */
             background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 25%, #e0f2fe 50%, #f0fdf4 75%, #dcfce7 100%);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
@@ -38,7 +37,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* 3D Text Effect */
+        /* 3D Text Effect สำหรับชื่อร้าน Navbar (สีขาว) */
         .text-3d {
             color: #ffffff;
             text-shadow: 
@@ -49,7 +48,17 @@
             letter-spacing: 1px;
         }
 
-        /* Floating Elements */
+        /* 3D Text Effect สำหรับคำว่า อาหารเสริมพืช (สีเขียว) */
+        .text-3d-green {
+            color: #15803d;
+            text-shadow: 
+                1px 1px 0px #ffffff,
+                2px 2px 0px #bbf7d0,
+                3px 3px 0px #86efac,
+                4px 4px 6px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+        }
+
         .floating-leaf {
             position: fixed;
             color: rgba(21, 128, 61, 0.1);
@@ -70,8 +79,6 @@
         .modal.active { display: flex; animation: fadeIn 0.2s; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* Video/Image constraints for reviews */
         .review-media { max-height: 200px; width: 100%; object-fit: cover; border-radius: 0.5rem; }
     </style>
 </head>
@@ -85,7 +92,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center cursor-pointer hover:scale-105 transition transform" onclick="navigate('home')">
-                    <img id="nav-logo" src="" alt="Logo" class="h-10 w-10 mr-3 rounded-full bg-white p-1 shadow hidden">
+                    <img id="nav-logo" src="https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png" alt="Logo" class="h-10 w-10 mr-3 rounded-full bg-white p-1 shadow">
                     <span id="nav-title" class="font-bold text-xl text-3d tracking-wide">กำลังโหลด...</span>
                 </div>
                 <div class="hidden md:flex space-x-6 items-center">
@@ -125,8 +132,8 @@
         
         <section id="home" class="page-section active">
             <div class="text-center bg-white/60 backdrop-blur-md p-8 md:p-14 rounded-3xl shadow-xl border border-white mb-10 transform transition hover:scale-[1.01]">
-                <img id="hero-logo" src="" class="h-28 w-28 mx-auto mb-6 rounded-full shadow-lg border-4 border-white hidden animate-bounce" style="animation-duration: 3s;">
-                <h1 id="hero-title" class="text-4xl md:text-6xl font-black mb-6 text-3d leading-tight pb-2">อาหารเสริมพืช</h1>
+                <img id="hero-logo" src="https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png" class="h-28 w-28 mx-auto mb-6 rounded-full shadow-lg border-4 border-white animate-bounce" style="animation-duration: 3s;">
+                <h1 id="hero-title" class="text-4xl md:text-6xl font-black mb-6 text-3d-green leading-tight pb-2">อาหารเสริมพืช</h1>
                 <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-2xl mx-auto font-medium">ช่วยให้พืชเติบโตแข็งแรง เพิ่มผลผลิตอย่างเห็นได้ชัด ตอบโจทย์เกษตรกรผู้ปลูก ทุเรียน ยางพารา ปาล์มน้ำมัน และนาข้าว</p>
                 <button onclick="navigate('products')" class="bg-gradient-to-r from-ptgold to-yellow-500 text-white px-10 py-4 rounded-full font-bold text-xl hover:from-yellow-600 hover:to-ptgold transition shadow-xl transform hover:-translate-y-1">
                     <i class="fas fa-shopping-bag mr-2"></i> เลือกชมสินค้าเลย
@@ -225,20 +232,16 @@
                             <form id="admin-review-form" class="hidden bg-white p-5 rounded-xl shadow-lg border mb-6 space-y-4" onsubmit="event.preventDefault(); saveAdminReview();"><input type="hidden" id="ar-id">
                                 <h4 class="font-bold text-lg text-ptgreen border-b pb-2"><i class="fas fa-star mr-2"></i> ข้อมูลรีวิว</h4>
                                 <div class="grid grid-cols-2 gap-4"><div><label class="text-sm font-bold text-gray-700">ชื่อลูกค้า</label><input type="text" id="ar-name" required class="w-full p-2.5 bg-gray-50 border rounded-lg mt-1 outline-none focus:bg-white focus:ring-2 focus:ring-ptgreen"></div><div><label class="text-sm font-bold text-gray-700">คะแนน (1-5)</label><input type="number" id="ar-rating" min="1" max="5" required class="w-full p-2.5 bg-gray-50 border rounded-lg mt-1 outline-none focus:bg-white focus:ring-2 focus:ring-ptgreen"></div></div>
-                                
                                 <div class="grid grid-cols-2 gap-4 bg-gray-50 p-3 rounded-lg border">
                                     <div><label class="text-sm font-bold text-gray-700">ประเภทสื่อ</label>
                                         <select id="ar-media-type" class="w-full p-2 border rounded-lg mt-1 outline-none bg-white">
-                                            <option value="">ไม่มีสื่อ (ข้อความเท่านั้น)</option>
-                                            <option value="image">แนบรูปภาพ</option>
-                                            <option value="video">แนบวีดีโอ (URL mp4)</option>
+                                            <option value="">ไม่มีสื่อ (ข้อความเท่านั้น)</option><option value="image">แนบรูปภาพ</option><option value="video">แนบวีดีโอ (URL mp4)</option>
                                         </select>
                                     </div>
                                     <div><label class="text-sm font-bold text-gray-700">URL รูป/วีดีโอ</label>
                                         <input type="url" id="ar-media-url" placeholder="https://..." class="w-full p-2 border rounded-lg mt-1 outline-none bg-white">
                                     </div>
                                 </div>
-
                                 <div><label class="text-sm font-bold text-gray-700">ข้อความรีวิว</label><textarea id="ar-content" required rows="2" class="w-full p-2.5 bg-gray-50 border rounded-lg mt-1 outline-none focus:bg-white focus:ring-2 focus:ring-ptgreen"></textarea></div>
                                 <div class="flex gap-3 pt-2"><button type="submit" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-bold flex-1 hover:bg-blue-700 shadow">บันทึกข้อมูล</button><button type="button" onclick="document.getElementById('admin-review-form').classList.add('hidden')" class="bg-gray-200 text-gray-700 px-6 py-2.5 rounded-lg font-bold hover:bg-gray-300">ยกเลิก</button></div>
                             </form>
@@ -339,7 +342,7 @@
         window.onload = async () => {
             showLoader(true, 'เชื่อมต่อฐานข้อมูลปฐพีธารา...');
             try {
-                if(GAS_API_URL === 'YOUR_WEB_APP_URL_HERE') { console.warn('Offline Mode'); loadMockData(); }
+                if(GAS_API_URL === 'https://script.google.com/macros/s/AKfycbwAopNW-4WH4qIjKFZ9M612ftFjXoGUk_zhkWUUwf3mEFviyY2D-jL6ya8odN8pxA7V/exec') { console.warn('Offline Mode'); loadMockData(); }
                 else {
                     const data = await apiCall({ action: 'getInitialData' });
                     if(data.success) {
@@ -355,7 +358,6 @@
             showLoader(false);
         };
 
-        // --- Core Functions ---
         async function apiCall(payload) {
             const res = await fetch(GAS_API_URL, { method: 'POST', body: JSON.stringify(payload) });
             return await res.json();
@@ -381,11 +383,10 @@
             const s = appData.settings;
             document.title = (s.store_name || 'ร้านค้า') + ' - อาหารเสริมพืช';
             document.getElementById('nav-title').innerText = s.store_name || 'ปฐพีธารา';
-            document.getElementById('hero-title').innerText = s.store_name || 'อาหารเสริมพืช';
             
             if(s.logo_url) {
-                document.getElementById('nav-logo').src = s.logo_url; document.getElementById('nav-logo').classList.remove('hidden');
-                document.getElementById('hero-logo').src = s.logo_url; document.getElementById('hero-logo').classList.remove('hidden');
+                document.getElementById('nav-logo').src = s.logo_url; 
+                document.getElementById('hero-logo').src = s.logo_url; 
                 document.getElementById('dynamic-favicon').href = s.logo_url;
             }
             document.getElementById('checkout-bank').innerText = s.bank_name || '-';
@@ -394,13 +395,10 @@
             if(s.qr_url) { document.getElementById('checkout-qr').src = s.qr_url; document.getElementById('checkout-qr').classList.remove('hidden'); }
         }
 
-        // --- Public UI ---
         function renderHomeReviews() {
             const container = document.getElementById('home-reviews'); container.innerHTML = '';
             appData.reviews.slice(0,3).forEach(r => {
                 const stars = Array(Number(r.Rating)).fill('<i class="fas fa-star text-ptgold"></i>').join('');
-                
-                // เช็คสื่อ (รูป/วีดีโอ)
                 let mediaHtml = '';
                 if(r.MediaURL && r.MediaType === 'image') {
                     mediaHtml = `<img src="${r.MediaURL}" class="review-media mb-3 shadow-sm border">`;
@@ -588,7 +586,7 @@
             showLoader(false);
         }
 
-        // Admin: Products, Agents, Reviews, Settings (Functions mirror exactly what was built)
+        // Admin: Products
         function renderAdminProducts() {
             const tbody = document.getElementById('admin-products-tbody'); tbody.innerHTML = '';
             appData.products.forEach(p => tbody.innerHTML += `<tr class="hover:bg-gray-50"><td class="p-4"><img src="${p.ImageURL}" class="w-12 h-12 object-cover rounded shadow-sm"></td><td class="p-4 font-bold text-gray-800">${p.Name}</td><td class="p-4"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">${p.Category}</span></td><td class="p-4 font-bold text-ptgold">฿${p.Price}</td><td class="p-4 text-center space-x-2"><button onclick="editProduct('${p.ID}')" class="text-blue-500 hover:text-blue-700 bg-blue-50 w-8 h-8 rounded-full"><i class="fas fa-edit"></i></button><button onclick="deleteProduct('${p.ID}')" class="text-red-500 hover:text-red-700 bg-red-50 w-8 h-8 rounded-full"><i class="fas fa-trash"></i></button></td></tr>`);
@@ -605,31 +603,62 @@
         }
         async function deleteProduct(id) { if(!confirm('ลบสินค้านี้?')) return; showLoader(true); const res = await apiCall({action:'deleteProduct', id:id}); if(res.success) { appData.products = appData.products.filter(x=>x.ID!==id); renderAdminProducts(); } showLoader(false); }
 
+        // Admin: Agents
         function renderAdminAgents() {
             const tbody = document.getElementById('admin-agents-tbody'); tbody.innerHTML = '';
-            appData.agents.forEach(a => tbody.innerHTML += `<tr class="hover:bg-gray-50"><td class="p-4 font-bold text-gray-800">${a.Name}</td><td class="p-4 text-gray-600">${a.Province}</td><td class="p-4 text-gray-600">${a.Phone}</td><td class="p-4 text-center"><button onclick="deleteAgent('${a.ID}')" class="text-red-500 bg-red-50 w-8 h-8 rounded-full"><i class="fas fa-trash"></i></button></td></tr>`);
+            appData.agents.forEach(a => tbody.innerHTML += `<tr class="hover:bg-gray-50"><td class="p-4 font-bold text-gray-800">${a.Name}</td><td class="p-4 text-gray-600">${a.Province}</td><td class="p-4 text-gray-600">${a.Phone}</td><td class="p-4 text-center space-x-2"><button onclick="editAgent('${a.ID}')" class="text-blue-500 hover:text-blue-700 bg-blue-50 w-8 h-8 rounded-full"><i class="fas fa-edit"></i></button><button onclick="deleteAgent('${a.ID}')" class="text-red-500 hover:text-red-700 bg-red-50 w-8 h-8 rounded-full"><i class="fas fa-trash"></i></button></td></tr>`);
         }
         function openAgentForm() { document.getElementById('admin-agent-form').reset(); document.getElementById('aa-id').value=''; document.getElementById('admin-agent-form').classList.remove('hidden'); }
+        function editAgent(id) {
+            const a = appData.agents.find(x=>x.ID===id); 
+            document.getElementById('aa-id').value=a.ID; 
+            document.getElementById('aa-name').value=a.Name; 
+            document.getElementById('aa-province').value=a.Province; 
+            document.getElementById('aa-phone').value=a.Phone; 
+            document.getElementById('aa-line').value=a.Line; 
+            document.getElementById('admin-agent-form').classList.remove('hidden');
+        }
         async function saveAdminAgent() {
             showLoader(true); const p = { action: 'saveAgent', id: document.getElementById('aa-id').value, name: document.getElementById('aa-name').value, province: document.getElementById('aa-province').value, phone: document.getElementById('aa-phone').value, line: document.getElementById('aa-line').value };
             const res = await apiCall(p);
-            if(res.success) { p.ID=res.id; p.Name=p.name; p.Province=p.province; p.Phone=p.phone; p.Line=p.line; appData.agents.push(p); renderAdminAgents(); document.getElementById('admin-agent-form').classList.add('hidden'); }
+            if(res.success) { 
+                p.ID=res.id; p.Name=p.name; p.Province=p.province; p.Phone=p.phone; p.Line=p.line; 
+                const idx = appData.agents.findIndex(x=>x.ID===res.id);
+                if(idx>-1) appData.agents[idx]=p; else appData.agents.push(p); 
+                renderAdminAgents(); document.getElementById('admin-agent-form').classList.add('hidden'); 
+            }
             showLoader(false);
         }
         async function deleteAgent(id) { if(!confirm('ลบตัวแทน?')) return; showLoader(true); const res = await apiCall({action:'deleteAgent', id:id}); if(res.success) { appData.agents = appData.agents.filter(x=>x.ID!==id); renderAdminAgents(); } showLoader(false); }
 
+        // Admin: Reviews
         function renderAdminReviews() {
             const tbody = document.getElementById('admin-reviews-tbody'); tbody.innerHTML = '';
             appData.reviews.forEach(r => {
                 let mBadge = r.MediaURL ? (r.MediaType==='video'?'<span class="bg-purple-100 text-purple-700 px-2 py-1 rounded text-xs font-bold"><i class="fas fa-video"></i> วีดีโอ</span>':'<span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold"><i class="fas fa-image"></i> รูปภาพ</span>') : '-';
-                tbody.innerHTML += `<tr class="hover:bg-gray-50"><td class="p-4 font-bold">${r.CustomerName}</td><td class="p-4 text-gray-600 text-sm line-clamp-2">${r.Content}</td><td class="p-4 text-center">${mBadge}</td><td class="p-4 text-center"><button onclick="deleteReview('${r.ID}')" class="text-red-500 bg-red-50 w-8 h-8 rounded-full"><i class="fas fa-trash"></i></button></td></tr>`;
+                tbody.innerHTML += `<tr class="hover:bg-gray-50"><td class="p-4 font-bold">${r.CustomerName}</td><td class="p-4 text-gray-600 text-sm line-clamp-2">${r.Content}</td><td class="p-4 text-center">${mBadge}</td><td class="p-4 text-center space-x-2"><button onclick="editReview('${r.ID}')" class="text-blue-500 hover:text-blue-700 bg-blue-50 w-8 h-8 rounded-full"><i class="fas fa-edit"></i></button><button onclick="deleteReview('${r.ID}')" class="text-red-500 hover:text-red-700 bg-red-50 w-8 h-8 rounded-full"><i class="fas fa-trash"></i></button></td></tr>`;
             });
         }
         function openReviewForm() { document.getElementById('admin-review-form').reset(); document.getElementById('ar-id').value=''; document.getElementById('admin-review-form').classList.remove('hidden'); }
+        function editReview(id) {
+            const r = appData.reviews.find(x=>x.ID===id); 
+            document.getElementById('ar-id').value=r.ID; 
+            document.getElementById('ar-name').value=r.CustomerName; 
+            document.getElementById('ar-content').value=r.Content; 
+            document.getElementById('ar-rating').value=r.Rating; 
+            document.getElementById('ar-media-type').value=r.MediaType || ''; 
+            document.getElementById('ar-media-url').value=r.MediaURL || ''; 
+            document.getElementById('admin-review-form').classList.remove('hidden');
+        }
         async function saveAdminReview() {
             showLoader(true); const p = { action: 'saveReview', id: document.getElementById('ar-id').value, customerName: document.getElementById('ar-name').value, content: document.getElementById('ar-content').value, rating: document.getElementById('ar-rating').value, mediaType: document.getElementById('ar-media-type').value, mediaUrl: document.getElementById('ar-media-url').value };
             const res = await apiCall(p);
-            if(res.success) { p.ID=res.id; p.CustomerName=p.customerName; p.Content=p.content; p.Rating=p.rating; p.MediaType=p.mediaType; p.MediaURL=p.mediaUrl; appData.reviews.push(p); renderAdminReviews(); renderHomeReviews(); document.getElementById('admin-review-form').classList.add('hidden'); }
+            if(res.success) { 
+                p.ID=res.id; p.CustomerName=p.customerName; p.Content=p.content; p.Rating=p.rating; p.MediaType=p.mediaType; p.MediaURL=p.mediaUrl; 
+                const idx = appData.reviews.findIndex(x=>x.ID===res.id);
+                if(idx>-1) appData.reviews[idx]=p; else appData.reviews.push(p); 
+                renderAdminReviews(); renderHomeReviews(); document.getElementById('admin-review-form').classList.add('hidden'); 
+            }
             showLoader(false);
         }
         async function deleteReview(id) { if(!confirm('ลบรีวิว?')) return; showLoader(true); const res = await apiCall({action:'deleteReview', id:id}); if(res.success) { appData.reviews = appData.reviews.filter(x=>x.ID!==id); renderAdminReviews(); renderHomeReviews(); } showLoader(false); }
@@ -638,7 +667,6 @@
         async function saveGeneralSettings() { showLoader(true); const s = { store_name: document.getElementById('set-store-name').value, logo_url: document.getElementById('set-logo-url').value, admin_email: document.getElementById('set-admin-email').value }; const res = await apiCall({action:'saveSettings', settings: s}); if(res.success) { Object.assign(appData.settings, s); applySettings(); alert('บันทึกสำเร็จ'); } showLoader(false); }
         async function savePaymentSettings() { showLoader(true); const s = { bank_name: document.getElementById('set-bank-name').value, acc_num: document.getElementById('set-acc-num').value, acc_name: document.getElementById('set-acc-name').value, qr_url: document.getElementById('set-qr-url').value }; const res = await apiCall({action:'saveSettings', settings: s}); if(res.success) { Object.assign(appData.settings, s); applySettings(); alert('บันทึกสำเร็จ'); } showLoader(false); }
 
-        // Mock Data
         function loadMockData() {
             appData.products = [{ID:'P1',Name:'ปฐพีธารา ทุเรียน',Category:'ทุเรียน',Price:890,Benefits:'ฟื้นต้นไว แตกยอดดี',Details:'...',ImageURL:'https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png'}];
             appData.agents = [{ID:'A1',Name:'ร้านสมหมาย',Province:'ชลบุรี',Phone:'081-xxx',Line:'@sm'}];
