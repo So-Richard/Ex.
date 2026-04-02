@@ -142,8 +142,6 @@
             <div class="bg-white/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm mb-6 inline-block">
                 <h2 class="text-2xl font-bold text-ptgreen border-l-4 border-ptgold pl-3">สินค้าของเรา</h2>
             </div>
-            <div id="category-filters" class="flex space-x-3 mb-6 overflow-x-auto pb-4 hide-scrollbar">
-                </div>
             <div id="product-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"></div>
         </section>
 
@@ -196,16 +194,15 @@
                             <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-xl text-gray-800">จัดการสินค้า</h3><button onclick="openProductForm()" class="bg-ptgreen text-white px-4 py-2 rounded-lg shadow font-bold text-sm hover:bg-green-700"><i class="fas fa-plus"></i> เพิ่มสินค้า</button></div>
                             <form id="admin-product-form" class="hidden bg-white p-5 rounded-xl shadow-lg border mb-6 space-y-4" onsubmit="event.preventDefault(); saveAdminProduct();"><input type="hidden" id="ap-id">
                                 <h4 class="font-bold text-lg text-ptgreen border-b pb-2"><i class="fas fa-box-open mr-2"></i> ข้อมูลสินค้า</h4>
-                                <div class="grid grid-cols-2 gap-4">
+                                <div class="grid grid-cols-1 gap-4">
                                     <div><label class="text-sm font-bold text-gray-700">ชื่อสินค้า</label><input type="text" id="ap-name" required class="w-full p-2.5 bg-gray-50 border rounded-lg mt-1 outline-none focus:bg-white focus:ring-2 focus:ring-ptgreen"></div>
-                                    <div><label class="text-sm font-bold text-gray-700">หมวดหมู่</label><select id="ap-category" class="w-full p-2.5 bg-gray-50 border rounded-lg mt-1 outline-none focus:bg-white focus:ring-2 focus:ring-ptgreen"></select></div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4"><div><label class="text-sm font-bold text-gray-700">ราคา (บาท)</label><input type="number" id="ap-price" required class="w-full p-2.5 bg-gray-50 border rounded-lg mt-1 outline-none focus:bg-white focus:ring-2 focus:ring-ptgreen"></div><div><label class="text-sm font-bold text-gray-700">URL รูปภาพ</label><input type="url" id="ap-image" required class="w-full p-2.5 bg-gray-50 border rounded-lg mt-1 outline-none focus:bg-white focus:ring-2 focus:ring-ptgreen"></div></div>
                                 <div><label class="text-sm font-bold text-gray-700">สรรพคุณเบื้องต้น</label><input type="text" id="ap-benefits" required class="w-full p-2.5 bg-gray-50 border rounded-lg mt-1 outline-none focus:bg-white focus:ring-2 focus:ring-ptgreen"></div>
                                 <div><label class="text-sm font-bold text-gray-700">รายละเอียดเต็ม</label><textarea id="ap-details" required rows="3" class="w-full p-2.5 bg-gray-50 border rounded-lg mt-1 outline-none focus:bg-white focus:ring-2 focus:ring-ptgreen"></textarea></div>
                                 <div class="flex gap-3 pt-2"><button type="submit" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-bold flex-1 hover:bg-blue-700 shadow">บันทึกข้อมูล</button><button type="button" onclick="document.getElementById('admin-product-form').classList.add('hidden')" class="bg-gray-200 text-gray-700 px-6 py-2.5 rounded-lg font-bold hover:bg-gray-300">ยกเลิก</button></div>
                             </form>
-                            <div class="overflow-x-auto border rounded-xl shadow-sm bg-white"><table class="w-full text-left border-collapse text-sm min-w-[600px]"><thead class="bg-gray-50 text-gray-700 border-b"><tr><th class="p-4 w-20">รูป</th><th class="p-4">ชื่อสินค้า</th><th class="p-4 w-32">หมวดหมู่</th><th class="p-4 w-24">ราคา</th><th class="p-4 w-28 text-center">จัดการ</th></tr></thead><tbody id="admin-products-tbody" class="divide-y"></tbody></table></div>
+                            <div class="overflow-x-auto border rounded-xl shadow-sm bg-white"><table class="w-full text-left border-collapse text-sm min-w-[600px]"><thead class="bg-gray-50 text-gray-700 border-b"><tr><th class="p-4 w-20">รูป</th><th class="p-4">ชื่อสินค้า</th><th class="p-4 w-24">ราคา</th><th class="p-4 w-28 text-center">จัดการ</th></tr></thead><tbody id="admin-products-tbody" class="divide-y"></tbody></table></div>
                         </div>
 
                         <div id="admin-tab-agents" class="admin-content hidden">
@@ -247,11 +244,6 @@
                                     <div><label class="text-sm font-bold text-gray-700">ชื่อร้านค้า (แสดงผล 3D บนเว็บ)</label><input type="text" id="set-store-name" required class="w-full p-3 bg-gray-50 border rounded-lg mt-1"></div>
                                     <div><label class="text-sm font-bold text-gray-700">URL โลโก้ร้าน</label><input type="url" id="set-logo-url" required class="w-full p-3 bg-gray-50 border rounded-lg mt-1"></div>
                                     <div><label class="text-sm font-bold text-gray-700">อีเมลรับแจ้งเตือนออเดอร์ (แอดมิน)</label><input type="email" id="set-admin-email" class="w-full p-3 bg-gray-50 border rounded-lg mt-1"></div>
-                                    <div class="bg-gray-50 p-4 rounded-lg border">
-                                        <label class="text-sm font-bold text-gray-700"><i class="fas fa-tags text-ptgreen mr-1"></i> หมวดหมู่สินค้า <span class="text-xs text-gray-500 font-normal">(คั่นด้วยเครื่องหมายลูกน้ำ ,)</span></label>
-                                        <input type="text" id="set-categories" placeholder="เช่น ทุเรียน, ยางพารา, ทั่วไป" class="w-full p-3 bg-white border rounded-lg mt-2 focus:ring-2 focus:ring-ptgreen outline-none">
-                                        <p class="text-xs text-gray-500 mt-2">* ข้อมูลนี้จะไปแสดงเป็นปุ่มกดในหน้าแรก และช่องเลือกหมวดหมู่ตอนเพิ่มสินค้า</p>
-                                    </div>
                                     <button type="submit" class="bg-ptgreen text-white px-8 py-3 rounded-lg font-bold shadow-md hover:bg-green-700 mt-2">บันทึกข้อมูลเว็บ</button>
                                 </div>
                             </form>
@@ -373,7 +365,7 @@
                         appData.orders = data.orders || [];
                     }
                 }
-                applySettings(); renderCategoryFilters(); renderProducts(); renderAgents(); renderHomeReviews();
+                applySettings(); renderProducts(); renderAgents(); renderHomeReviews();
             } catch(e) { 
                 console.error(e); 
                 Swal.fire('ข้อผิดพลาด', 'ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่', 'error');
@@ -402,29 +394,6 @@
             }
         }
 
-        // --- ระบบหมวดหมู่แบบไดนามิก ---
-        function getCategories() {
-            let catStr = appData.settings.product_categories || 'ทุเรียน,ยางพารา,ปาล์มน้ำมัน,นาข้าว';
-            return catStr.split(',').map(c => c.trim()).filter(c => c);
-        }
-
-        function renderCategoryFilters() {
-            const container = document.getElementById('category-filters');
-            container.innerHTML = `<button onclick="filterProducts('all', this)" class="filter-btn bg-ptgreen text-white px-6 py-2.5 rounded-full whitespace-nowrap text-sm font-bold shadow-md transform hover:scale-105 transition">ทั้งหมด</button>`;
-            
-            getCategories().forEach(cat => {
-                container.innerHTML += `<button onclick="filterProducts('${cat}', this)" class="filter-btn bg-white text-gray-700 hover:bg-ptgreen hover:text-white px-6 py-2.5 rounded-full whitespace-nowrap text-sm font-bold shadow-sm transform hover:scale-105 transition">${cat}</button>`;
-            });
-        }
-
-        function updateAdminCategorySelect() {
-            const select = document.getElementById('ap-category');
-            select.innerHTML = '';
-            getCategories().forEach(cat => {
-                select.innerHTML += `<option value="${cat}">${cat}</option>`;
-            });
-        }
-
         function applySettings() {
             const s = appData.settings;
             document.title = (s.store_name || 'ร้านค้า') + ' - อาหารเสริมพืช';
@@ -439,8 +408,6 @@
             document.getElementById('checkout-acc-num').innerText = s.acc_num || '-';
             document.getElementById('checkout-acc-name').innerText = s.acc_name || '-';
             if(s.qr_url) { document.getElementById('checkout-qr').src = s.qr_url; document.getElementById('checkout-qr').classList.remove('hidden'); }
-            
-            renderCategoryFilters();
         }
 
         function renderHomeReviews() {
@@ -466,19 +433,11 @@
             });
         }
 
-        function filterProducts(cat, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => { b.classList.remove('bg-ptgreen', 'text-white'); b.classList.add('bg-white', 'text-gray-700'); });
-            btn.classList.remove('bg-white', 'text-gray-700'); btn.classList.add('bg-ptgreen', 'text-white');
-            renderProducts(cat);
-        }
-
-        function renderProducts(cat='all') {
+        function renderProducts() {
             const container = document.getElementById('product-grid'); container.innerHTML = '';
-            const filtered = cat === 'all' ? appData.products : appData.products.filter(p => p.Category === cat);
-            filtered.forEach(p => {
+            appData.products.forEach(p => {
                 container.innerHTML += `
                     <div class="bg-white/95 backdrop-blur-sm border rounded-2xl shadow-md overflow-hidden flex flex-col relative group hover:shadow-2xl transition duration-300 transform hover:-translate-y-1">
-                        <div class="absolute top-3 right-3 bg-white/95 text-ptgreen px-3 py-1 rounded-full text-[10px] font-black shadow-md border border-green-100 z-10">${p.Category}</div>
                         <div class="overflow-hidden bg-gray-100"><img src="${p.ImageURL}" class="w-full h-48 object-cover group-hover:scale-110 transition duration-500"></div>
                         <div class="p-4 flex flex-col flex-grow">
                             <h3 class="font-bold text-gray-800 line-clamp-1 text-lg">${p.Name}</h3>
@@ -488,7 +447,7 @@
                         </div>
                     </div>`;
             });
-            if(filtered.length===0) container.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500 bg-white/50 rounded-xl">ไม่พบสินค้าในหมวดหมู่นี้</div>';
+            if(appData.products.length===0) container.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500 bg-white/50 rounded-xl">ไม่พบสินค้า</div>';
         }
 
         function renderAgents() {
@@ -635,7 +594,7 @@
                 document.getElementById('dash-agents').innerText = appData.agents.length;
             }
             if(tabId === 'orders') renderAdminOrders();
-            if(tabId === 'products') { renderAdminProducts(); updateAdminCategorySelect(); }
+            if(tabId === 'products') renderAdminProducts();
             if(tabId === 'agents') renderAdminAgents();
             if(tabId === 'reviews') renderAdminReviews();
             if(tabId === 'settings') fillAdminSettings();
@@ -682,16 +641,16 @@
         // Admin: Products
         function renderAdminProducts() {
             const tbody = document.getElementById('admin-products-tbody'); tbody.innerHTML = '';
-            appData.products.forEach(p => tbody.innerHTML += `<tr class="hover:bg-gray-50"><td class="p-4"><img src="${p.ImageURL}" class="w-12 h-12 object-cover rounded shadow-sm"></td><td class="p-4 font-bold text-gray-800">${p.Name}</td><td class="p-4"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">${p.Category}</span></td><td class="p-4 font-bold text-ptgold">฿${p.Price}</td><td class="p-4 text-center space-x-2"><button onclick="editProduct('${p.ID}')" class="text-blue-500 hover:text-blue-700 bg-blue-50 w-8 h-8 rounded-full"><i class="fas fa-edit"></i></button><button onclick="deleteProduct('${p.ID}')" class="text-red-500 hover:text-red-700 bg-red-50 w-8 h-8 rounded-full"><i class="fas fa-trash"></i></button></td></tr>`);
+            appData.products.forEach(p => tbody.innerHTML += `<tr class="hover:bg-gray-50"><td class="p-4"><img src="${p.ImageURL}" class="w-12 h-12 object-cover rounded shadow-sm"></td><td class="p-4 font-bold text-gray-800">${p.Name}</td><td class="p-4 font-bold text-ptgold">฿${p.Price}</td><td class="p-4 text-center space-x-2"><button onclick="editProduct('${p.ID}')" class="text-blue-500 hover:text-blue-700 bg-blue-50 w-8 h-8 rounded-full"><i class="fas fa-edit"></i></button><button onclick="deleteProduct('${p.ID}')" class="text-red-500 hover:text-red-700 bg-red-50 w-8 h-8 rounded-full"><i class="fas fa-trash"></i></button></td></tr>`);
         }
         function openProductForm() { document.getElementById('admin-product-form').reset(); document.getElementById('ap-id').value=''; document.getElementById('admin-product-form').classList.remove('hidden'); }
         function editProduct(id) {
-            const p = appData.products.find(x=>x.ID===id); document.getElementById('ap-id').value=p.ID; document.getElementById('ap-name').value=p.Name; document.getElementById('ap-category').value=p.Category; document.getElementById('ap-price').value=p.Price; document.getElementById('ap-image').value=p.ImageURL; document.getElementById('ap-benefits').value=p.Benefits; document.getElementById('ap-details').value=p.Details; document.getElementById('admin-product-form').classList.remove('hidden');
+            const p = appData.products.find(x=>x.ID===id); document.getElementById('ap-id').value=p.ID; document.getElementById('ap-name').value=p.Name; document.getElementById('ap-price').value=p.Price; document.getElementById('ap-image').value=p.ImageURL; document.getElementById('ap-benefits').value=p.Benefits; document.getElementById('ap-details').value=p.Details; document.getElementById('admin-product-form').classList.remove('hidden');
         }
         async function saveAdminProduct() {
-            showLoader(true); const p = { action: 'saveProduct', id: document.getElementById('ap-id').value, name: document.getElementById('ap-name').value, category: document.getElementById('ap-category').value, price: document.getElementById('ap-price').value, imageUrl: document.getElementById('ap-image').value, benefits: document.getElementById('ap-benefits').value, details: document.getElementById('ap-details').value };
+            showLoader(true); const p = { action: 'saveProduct', id: document.getElementById('ap-id').value, name: document.getElementById('ap-name').value, price: document.getElementById('ap-price').value, imageUrl: document.getElementById('ap-image').value, benefits: document.getElementById('ap-benefits').value, details: document.getElementById('ap-details').value, category: '' };
             const res = await apiCall(p);
-            if(res.success) { const idx = appData.products.findIndex(x=>x.ID===res.id); p.ID = res.id; p.ImageURL = p.imageUrl; p.Name = p.name; p.Category = p.category; p.Price = p.price; p.Benefits = p.benefits; p.Details = p.details; if(idx>-1) appData.products[idx]=p; else appData.products.push(p); renderAdminProducts(); document.getElementById('admin-product-form').classList.add('hidden'); Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `บันทึกสินค้าสำเร็จ`, showConfirmButton: false, timer: 1500 });}
+            if(res.success) { const idx = appData.products.findIndex(x=>x.ID===res.id); p.ID = res.id; p.ImageURL = p.imageUrl; p.Name = p.name; p.Price = p.price; p.Benefits = p.benefits; p.Details = p.details; if(idx>-1) appData.products[idx]=p; else appData.products.push(p); renderAdminProducts(); document.getElementById('admin-product-form').classList.add('hidden'); Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `บันทึกสินค้าสำเร็จ`, showConfirmButton: false, timer: 1500 });}
             showLoader(false);
         }
         async function deleteProduct(id) { 
@@ -766,7 +725,6 @@
             document.getElementById('set-store-name').value = s.store_name || ''; 
             document.getElementById('set-logo-url').value = s.logo_url || ''; 
             document.getElementById('set-admin-email').value = s.admin_email || ''; 
-            document.getElementById('set-categories').value = s.product_categories || 'ทุเรียน,ยางพารา,ปาล์มน้ำมัน,นาข้าว';
             document.getElementById('set-bank-name').value = s.bank_name || ''; 
             document.getElementById('set-acc-num').value = s.acc_num || ''; 
             document.getElementById('set-acc-name').value = s.acc_name || ''; 
@@ -777,8 +735,7 @@
             const s = { 
                 store_name: document.getElementById('set-store-name').value, 
                 logo_url: document.getElementById('set-logo-url').value, 
-                admin_email: document.getElementById('set-admin-email').value,
-                product_categories: document.getElementById('set-categories').value
+                admin_email: document.getElementById('set-admin-email').value
             }; 
             const res = await apiCall({action:'saveSettings', settings: s}); 
             if(res.success) { Object.assign(appData.settings, s); applySettings(); Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `บันทึกข้อมูลเว็บสำเร็จ`, showConfirmButton: false, timer: 1500 }); } 
@@ -794,11 +751,11 @@
 
         // Mock Data สำหรับเปิดในเครื่องโดยไม่มี API
         function loadMockData() {
-            appData.products = [{ID:'P1',Name:'ปฐพีธารา ทุเรียน',Category:'ทุเรียน',Price:890,Benefits:'ฟื้นต้นไว แตกยอดดี',Details:'...',ImageURL:'https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png'}];
+            appData.products = [{ID:'P1',Name:'ปฐพีธารา บำรุงพืช',Price:890,Benefits:'ฟื้นต้นไว แตกยอดดี',Details:'...',ImageURL:'https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png'}];
             appData.agents = [{ID:'A1',Name:'ร้านสมหมาย',Province:'ชลบุรี',Phone:'081-xxx',Line:'@sm'}];
             appData.reviews = [{ID:'R1',CustomerName:'คุณใจดี',Content:'แตกยอดดีมาก ใช้แล้วใบเขียวเข้ม ทุเรียนสมบูรณ์มากครับ',Rating:5, MediaURL:'https://images.unsplash.com/photo-1634467524884-897d0af5e124?q=80&w=400&auto=format&fit=crop', MediaType:'image'}];
             appData.orders = [{OrderID:'ORD001',Date:'2/4/2026',CustomerName:'ลุงประยุทธ์',Address:'บ้าน',Province:'ระยอง',Items:'[{"name":"ทุเรียน","qty":1,"price":890}]',Total:890,SlipURL:'',Status:'Pending'}];
-            appData.settings = { store_name:'โกดังปฐพีธารา', logo_url:'https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png', bank_name:'กสิกรไทย', acc_num:'123-456', acc_name:'บจก.', product_categories:'ทุเรียน,ยางพารา,ปาล์มน้ำมัน,นาข้าว,ทั่วไป'};
+            appData.settings = { store_name:'โกดังปฐพีธารา', logo_url:'https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png', bank_name:'กสิกรไทย', acc_num:'123-456', acc_name:'บจก.'};
         }
     </script>
 </body>
