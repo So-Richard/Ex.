@@ -9,6 +9,9 @@
     <meta name="theme-color" content="#15803d">
     
     <link rel="icon" id="dynamic-favicon" href="https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png">
+    <link rel="apple-touch-icon" id="apple-touch-icon" href="https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png">
+    <link rel="manifest" id="manifest-link">
+
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -127,8 +130,8 @@
         <section id="home" class="page-section active">
             <div class="text-center bg-white/60 backdrop-blur-md p-8 md:p-14 rounded-3xl shadow-xl border border-white mb-10 transform transition hover:scale-[1.01]">
                 <img id="hero-logo" src="https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png" class="h-28 w-28 mx-auto mb-6 rounded-full shadow-lg border-4 border-white animate-bounce" style="animation-duration: 3s;">
-                <h1 id="hero-title" class="text-4xl md:text-6xl font-black mb-6 text-3d-green leading-tight pb-2">ฟื้นดิน บำรุงพืช คืนชีวิตให้สวน</h1>
-                <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-2xl mx-auto font-medium">ช่วยให้พืชเติบโตแข็งแรง ลดต้นทุน เพิ่มผลผลิตอย่างเห็นได้ชัด ตอบโจทย์เกษตรกรผู้ปลูก ทุเรียน ยางพารา ปาล์มน้ำมัน นาข้าว และพืชทุกชนิด</p>
+                <h1 id="hero-title" class="text-4xl md:text-6xl font-black mb-6 text-3d-green leading-tight pb-2">อาหารเสริมพืช</h1>
+                <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-2xl mx-auto font-medium">ช่วยให้พืชเติบโตแข็งแรง เพิ่มผลผลิตอย่างเห็นได้ชัด ตอบโจทย์เกษตรกรผู้ปลูก ทุเรียน ยางพารา ปาล์มน้ำมัน และนาข้าว</p>
                 <button onclick="navigate('products')" class="bg-gradient-to-r from-ptgold to-yellow-500 text-white px-10 py-4 rounded-full font-bold text-xl hover:from-yellow-600 hover:to-ptgold transition shadow-xl transform hover:-translate-y-1">
                     <i class="fas fa-shopping-bag mr-2"></i> เลือกชมสินค้าเลย
                 </button>
@@ -265,6 +268,13 @@
 
     </main>
 
+    <div id="product-modal" class="modal fixed inset-0 bg-black/70 z-[60] items-center justify-center p-4 backdrop-blur-sm" onclick="if(event.target === this) closeProductModal()">
+         <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden relative flex flex-col max-h-[90vh] transform transition-all">
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 bg-white/90 text-gray-800 hover:text-red-500 w-10 h-10 rounded-full flex items-center justify-center shadow-md z-10 transition"><i class="fas fa-times text-xl"></i></button>
+            <div id="product-modal-content" class="overflow-y-auto hide-scrollbar flex-1 pb-4"></div>
+         </div>
+    </div>
+
     <div id="cart-modal" class="modal fixed inset-0 bg-black/70 z-[60] items-center justify-center p-4 backdrop-blur-sm" onclick="if(event.target === this) toggleCart()">
         <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl flex flex-col max-h-[90vh] transform transition-all relative overflow-hidden">
             <div class="bg-ptgreen text-white p-4 md:p-5 flex justify-between items-center rounded-t-2xl z-10">
@@ -345,7 +355,7 @@
     </div>
 
     <script>
-        const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbwAopNW-4WH4qIjKFZ9M612ftFjXoGUk_zhkWUUwf3mEFviyY2D-jL6ya8odN8pxA7V/exec'; // *** ใส่ URL Web App ***
+        const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbwAopNW-4WH4qIjKFZ9M612ftFjXoGUk_zhkWUUwf3mEFviyY2D-jL6ya8odN8pxA7V/exec'; 
         const SLIP_CHECK_API = 'https://script.google.com/macros/s/AKfycbzrwJ4J-QEjA9x_ClAJLoOk9TsNtthYT-RZxYxxxHE6KL2PWaKRZPG781jXQEReolPdEQ/exec';
         const ADMIN_PASS = '1234'; 
         let isAdminAuthed = false;
@@ -354,7 +364,7 @@
         window.onload = async () => {
             showLoader(true, 'เชื่อมต่อฐานข้อมูลปฐพีธารา...');
             try {
-                if(GAS_API_URL === 'https://script.google.com/macros/s/AKfycbwAopNW-4WH4qIjKFZ9M612ftFjXoGUk_zhkWUUwf3mEFviyY2D-jL6ya8odN8pxA7V/exec') { console.warn('Offline Mode'); loadMockData(); }
+                if(GAS_API_URL === 'YOUR_WEB_APP_URL_HERE') { console.warn('Offline Mode'); loadMockData(); }
                 else {
                     const data = await apiCall({ action: 'getInitialData' });
                     if(data.success) {
@@ -399,11 +409,30 @@
             document.title = (s.store_name || 'ร้านค้า') + ' - อาหารเสริมพืช';
             document.getElementById('nav-title').innerText = s.store_name || 'ปฐพีธารา';
             
-            if(s.logo_url) {
-                document.getElementById('nav-logo').src = s.logo_url; 
-                document.getElementById('hero-logo').src = s.logo_url; 
-                document.getElementById('dynamic-favicon').href = s.logo_url;
+            let logoUrl = s.logo_url || 'https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png';
+            
+            if(logoUrl) {
+                document.getElementById('nav-logo').src = logoUrl; 
+                document.getElementById('hero-logo').src = logoUrl; 
+                document.getElementById('dynamic-favicon').href = logoUrl;
+                document.getElementById('apple-touch-icon').href = logoUrl;
+                
+                const manifestData = {
+                    "name": s.store_name || "โกดังปฐพีธารา",
+                    "short_name": s.store_name || "ปฐพีธารา",
+                    "start_url": "./",
+                    "display": "standalone",
+                    "background_color": "#f0fdf4",
+                    "theme_color": "#15803d",
+                    "icons": [
+                        { "src": logoUrl, "sizes": "192x192", "type": "image/png" },
+                        { "src": logoUrl, "sizes": "512x512", "type": "image/png" }
+                    ]
+                };
+                const manifestBlob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
+                document.getElementById('manifest-link').href = URL.createObjectURL(manifestBlob);
             }
+
             document.getElementById('checkout-bank').innerText = s.bank_name || '-';
             document.getElementById('checkout-acc-num').innerText = s.acc_num || '-';
             document.getElementById('checkout-acc-name').innerText = s.acc_name || '-';
@@ -438,9 +467,9 @@
             appData.products.forEach(p => {
                 container.innerHTML += `
                     <div class="bg-white/95 backdrop-blur-sm border rounded-2xl shadow-md overflow-hidden flex flex-col relative group hover:shadow-2xl transition duration-300 transform hover:-translate-y-1">
-                        <div class="overflow-hidden bg-gray-100"><img src="${p.ImageURL}" class="w-full h-48 object-cover group-hover:scale-110 transition duration-500"></div>
+                        <div class="overflow-hidden bg-gray-100 cursor-pointer" onclick="viewProduct('${p.ID}')"><img src="${p.ImageURL}" class="w-full h-48 object-cover group-hover:scale-110 transition duration-500"></div>
                         <div class="p-4 flex flex-col flex-grow">
-                            <h3 class="font-bold text-gray-800 line-clamp-1 text-lg">${p.Name}</h3>
+                            <h3 class="font-bold text-gray-800 line-clamp-1 text-lg cursor-pointer hover:text-ptgreen transition" onclick="viewProduct('${p.ID}')">${p.Name}</h3>
                             <p class="text-ptgold font-black text-xl mb-2">฿${p.Price}</p>
                             <p class="text-xs text-gray-500 mb-4 flex-grow line-clamp-2 leading-relaxed">${p.Benefits}</p>
                             <button onclick="addToCart('${p.ID}')" class="w-full bg-gradient-to-r from-ptgreen to-green-700 text-white py-3 rounded-xl font-bold shadow-md hover:from-green-700 hover:to-ptgreen transition"><i class="fas fa-cart-plus mr-1"></i> หยิบใส่ตระกร้า</button>
@@ -449,6 +478,34 @@
             });
             if(appData.products.length===0) container.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500 bg-white/50 rounded-xl">ไม่พบสินค้า</div>';
         }
+        
+        function viewProduct(id) {
+            const p = appData.products.find(x => x.ID === id);
+            if(!p) return;
+            const modal = document.getElementById('product-modal');
+            document.getElementById('product-modal-content').innerHTML = `
+                <img src="${p.ImageURL}" class="w-full h-64 object-cover bg-gray-100">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 leading-tight mb-2">${p.Name}</h2>
+                    <p class="text-3xl text-ptgold font-black mb-4">฿${p.Price}</p>
+                    
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100 mb-5">
+                        <h4 class="font-bold text-ptgreen mb-2"><i class="fas fa-leaf mr-1"></i> สรรพคุณ</h4>
+                        <p class="text-gray-700 text-sm">${p.Benefits}</p>
+                    </div>
+                    
+                    <h4 class="font-bold text-gray-800 mb-2">รายละเอียดสินค้า</h4>
+                    <p class="text-gray-600 text-sm whitespace-pre-line mb-6 leading-relaxed">${p.Details}</p>
+                    
+                    <button onclick="addToCart('${p.ID}'); closeProductModal(); toggleCart();" class="w-full bg-gradient-to-r from-ptgreen to-green-700 text-white py-4 rounded-xl font-bold shadow-lg hover:from-green-700 hover:to-ptgreen transition flex items-center justify-center text-lg">
+                        <i class="fas fa-cart-plus mr-2"></i> หยิบใส่ตระกร้าทันที
+                    </button>
+                </div>
+            `;
+            modal.classList.add('active');
+        }
+        
+        function closeProductModal() { document.getElementById('product-modal').classList.remove('active'); }
 
         function renderAgents() {
             const search = document.getElementById('agent-search').value.toLowerCase();
@@ -472,7 +529,7 @@
             if(filtered.length===0) container.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500 bg-white/50 rounded-xl">ไม่พบตัวแทนในพื้นที่ดังกล่าว</div>';
         }
 
-        // --- Cart & Checkout (2 Steps) ---
+        // --- Cart & Checkout ---
         function addToCart(id) {
             const p = appData.products.find(x => x.ID === id);
             const exist = appData.cart.find(x => x.id === id);
@@ -496,7 +553,7 @@
         function toggleCart() { 
             document.getElementById('cart-modal').classList.toggle('active'); 
             updateCartUI(); 
-            goToShippingStep(); // Reset form to step 1 everytime cart is opened
+            goToShippingStep(); 
         }
 
         function goToPaymentStep() {
@@ -504,7 +561,6 @@
                 Swal.fire('ตะกร้าว่างเปล่า', 'กรุณาเลือกสินค้าก่อนทำการสั่งซื้อ', 'warning');
                 return;
             }
-            // ตรวจสอบการกรอกข้อมูล
             if(!document.getElementById('c-name').value || !document.getElementById('c-phone').value || !document.getElementById('c-address').value || !document.getElementById('c-province').value || !document.getElementById('c-zip').value) {
                 Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกข้อมูลจัดส่งให้ครบถ้วนทุกช่อง', 'warning');
                 return;
@@ -534,7 +590,6 @@
                     if(slipData.success === false) throw new Error('สลิปไม่ถูกต้อง');
                 } catch(e) { console.warn('Slip API Bypass/Error:', e); } 
 
-                // รวมข้อมูลที่อยู่
                 const fullAddress = document.getElementById('c-address').value + ' รหัสไปรษณีย์ ' + document.getElementById('c-zip').value + ' โทร: ' + document.getElementById('c-phone').value;
 
                 showLoader(true, 'กำลังบันทึกคำสั่งซื้อ...');
@@ -751,7 +806,7 @@
 
         // Mock Data สำหรับเปิดในเครื่องโดยไม่มี API
         function loadMockData() {
-            appData.products = [{ID:'P1',Name:'ปฐพีธารา บำรุงพืช',Price:890,Benefits:'ฟื้นต้นไว แตกยอดดี',Details:'...',ImageURL:'https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png'}];
+            appData.products = [{ID:'P1',Name:'ปฐพีธารา บำรุงพืช',Price:890,Benefits:'ฟื้นต้นไว แตกยอดดี',Details:'อาหารเสริมพืชปฐพีธารา บำรุงลึกถึงระดับเซลล์...',ImageURL:'https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png'}];
             appData.agents = [{ID:'A1',Name:'ร้านสมหมาย',Province:'ชลบุรี',Phone:'081-xxx',Line:'@sm'}];
             appData.reviews = [{ID:'R1',CustomerName:'คุณใจดี',Content:'แตกยอดดีมาก ใช้แล้วใบเขียวเข้ม ทุเรียนสมบูรณ์มากครับ',Rating:5, MediaURL:'https://images.unsplash.com/photo-1634467524884-897d0af5e124?q=80&w=400&auto=format&fit=crop', MediaType:'image'}];
             appData.orders = [{OrderID:'ORD001',Date:'2/4/2026',CustomerName:'ลุงประยุทธ์',Address:'บ้าน',Province:'ระยอง',Items:'[{"name":"ทุเรียน","qty":1,"price":890}]',Total:890,SlipURL:'',Status:'Pending'}];
