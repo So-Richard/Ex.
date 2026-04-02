@@ -12,6 +12,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -37,25 +39,15 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* 3D Text Effect สำหรับชื่อร้าน Navbar (สีขาว) */
         .text-3d {
             color: #ffffff;
-            text-shadow: 
-                1px 1px 0px #166534,
-                2px 2px 0px #14532d,
-                3px 3px 0px #064e3b,
-                4px 4px 6px rgba(0,0,0,0.5);
+            text-shadow: 1px 1px 0px #166534, 2px 2px 0px #14532d, 3px 3px 0px #064e3b, 4px 4px 6px rgba(0,0,0,0.5);
             letter-spacing: 1px;
         }
 
-        /* 3D Text Effect สำหรับคำว่า อาหารเสริมพืช (สีเขียว) */
         .text-3d-green {
             color: #15803d;
-            text-shadow: 
-                1px 1px 0px #ffffff,
-                2px 2px 0px #bbf7d0,
-                3px 3px 0px #86efac,
-                4px 4px 6px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 0px #ffffff, 2px 2px 0px #bbf7d0, 3px 3px 0px #86efac, 4px 4px 6px rgba(0,0,0,0.3);
             letter-spacing: 1px;
         }
 
@@ -80,6 +72,9 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .review-media { max-height: 200px; width: 100%; object-fit: cover; border-radius: 0.5rem; }
+        
+        /* SweetAlert2 Font Customization */
+        .swal2-container { font-family: 'Sarabun', sans-serif !important; }
     </style>
 </head>
 <body class="text-gray-800 relative">
@@ -276,13 +271,13 @@
 
     </main>
 
-    <div id="cart-modal" class="modal fixed inset-0 bg-black/70 z-[60] items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl flex flex-col max-h-[95vh] transform transition-all">
-            <div class="bg-ptgreen text-white p-5 flex justify-between items-center rounded-t-2xl">
+    <div id="cart-modal" class="modal fixed inset-0 bg-black/70 z-[60] items-center justify-center p-4 backdrop-blur-sm" onclick="if(event.target === this) toggleCart()">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl flex flex-col max-h-[90vh] transform transition-all">
+            <div class="bg-ptgreen text-white p-4 md:p-5 flex justify-between items-center rounded-t-2xl">
                 <h2 class="text-xl font-bold"><i class="fas fa-shopping-cart mr-2"></i> ตระกร้าสินค้า</h2>
                 <button onclick="toggleCart()" class="text-white hover:text-red-200 text-3xl leading-none">&times;</button>
             </div>
-            <div class="p-5 flex-1 overflow-y-auto bg-gray-50">
+            <div class="p-4 md:p-5 flex-1 overflow-y-auto bg-gray-50 hide-scrollbar">
                 <div id="cart-items" class="space-y-3 mb-5"></div>
                 <div class="bg-white p-5 rounded-2xl border shadow-sm">
                     <div class="flex justify-between items-end border-b pb-4 mb-4"><span class="font-bold text-gray-600 text-lg">ยอดรวมทั้งสิ้น</span><h3 class="text-3xl font-black text-ptgreen">฿<span id="cart-total">0</span></h3></div>
@@ -314,14 +309,14 @@
         </div>
     </div>
 
-    <div id="order-detail-modal" class="modal fixed inset-0 bg-black/70 z-[60] items-center justify-center p-4 backdrop-blur-sm">
-         <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative">
+    <div id="order-detail-modal" class="modal fixed inset-0 bg-black/70 z-[80] items-center justify-center p-4 backdrop-blur-sm" onclick="if(event.target === this) this.classList.remove('active')">
+         <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative flex flex-col max-h-[85vh]">
             <div class="bg-gray-800 text-white p-4 flex justify-between items-center"><h3 class="font-bold text-lg">รายละเอียดคำสั่งซื้อ</h3><button onclick="document.getElementById('order-detail-modal').classList.remove('active')" class="hover:text-red-400 text-2xl">&times;</button></div>
-            <div id="order-detail-content" class="p-6 max-h-[70vh] overflow-y-auto text-sm space-y-4"></div>
+            <div id="order-detail-content" class="p-6 overflow-y-auto hide-scrollbar text-sm space-y-4 flex-1"></div>
          </div>
     </div>
 
-    <div id="admin-login-modal" class="modal fixed inset-0 bg-black/80 z-[100] items-center justify-center p-4 backdrop-blur-sm">
+    <div id="admin-login-modal" class="modal fixed inset-0 bg-black/80 z-[100] items-center justify-center p-4 backdrop-blur-sm" onclick="if(event.target === this) this.classList.remove('active')">
         <div class="bg-white w-full max-w-sm p-8 rounded-3xl shadow-2xl text-center transform transition-all">
             <div class="w-20 h-20 bg-gradient-to-br from-red-100 to-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl shadow-inner"><i class="fas fa-user-shield"></i></div>
             <h2 class="text-2xl font-bold mb-2 text-gray-800">ผู้ดูแลระบบ</h2>
@@ -354,7 +349,10 @@
                     }
                 }
                 applySettings(); renderProducts(); renderAgents(); renderHomeReviews();
-            } catch(e) { console.error(e); alert('โหลดข้อมูลไม่สำเร็จ'); }
+            } catch(e) { 
+                console.error(e); 
+                Swal.fire('ข้อผิดพลาด', 'ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่', 'error');
+            }
             showLoader(false);
         };
 
@@ -478,8 +476,11 @@
             if(exist) exist.qty++; else appData.cart.push({ id: p.ID, name: p.Name, price: p.Price, qty: 1, img: p.ImageURL });
             updateCartUI(); 
             const icon = document.getElementById('cart-count'); icon.classList.add('scale-150'); setTimeout(()=>icon.classList.remove('scale-150'), 300);
-            alert(`เพิ่ม ${p.Name} ลงตระกร้าแล้ว`);
+            
+            // ใช้ SweetAlert2 แบบ Toast แจ้งเตือนมุมจอ
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `เพิ่ม ${p.Name} ลงตะกร้าแล้ว`, showConfirmButton: false, timer: 1500 });
         }
+        
         function updateCartUI() {
             document.getElementById('cart-count').innerText = appData.cart.reduce((sum, item) => sum + item.qty, 0);
             const container = document.getElementById('cart-items'); container.innerHTML = ''; let total = 0;
@@ -493,9 +494,15 @@
         function toggleCart() { document.getElementById('cart-modal').classList.toggle('active'); updateCartUI(); }
 
         async function processCheckout() {
-            if(appData.cart.length === 0) return alert('ตระกร้าว่างเปล่า');
+            if(appData.cart.length === 0) {
+                Swal.fire('ตะกร้าว่างเปล่า', 'กรุณาเลือกสินค้าก่อนทำการสั่งซื้อ', 'warning');
+                return;
+            }
             const file = document.getElementById('c-slip').files[0];
-            if(!file) return alert('กรุณาแนบสลิปโอนเงิน');
+            if(!file) {
+                Swal.fire('แจ้งเตือน', 'กรุณาแนบสลิปโอนเงิน', 'warning');
+                return;
+            }
 
             showLoader(true, 'กำลังดำเนินการ...');
             try {
@@ -512,13 +519,18 @@
                 if(GAS_API_URL !== 'YOUR_WEB_APP_URL_HERE') {
                     const res = await apiCall(payload);
                     if(res.success) {
-                        alert('✅ สั่งซื้อสำเร็จ! รหัสอ้างอิง: ' + res.orderId);
+                        Swal.fire({ icon: 'success', title: 'สั่งซื้อสำเร็จ!', text: 'รหัสอ้างอิง: ' + res.orderId, confirmButtonColor: '#15803d' });
                         appData.cart = []; updateCartUI(); toggleCart();
                         document.getElementById('checkout-form').reset(); document.getElementById('file-name').innerText='ยังไม่ได้เลือกไฟล์';
                         navigate('home');
                     }
-                } else { alert('Offline: จำลองสั่งซื้อสำเร็จ'); appData.cart=[]; toggleCart(); }
-            } catch(e) { alert('เกิดข้อผิดพลาด: '+e); }
+                } else { 
+                    Swal.fire({ icon: 'success', title: 'โหมดจำลอง', text: 'จำลองสั่งซื้อสำเร็จ', confirmButtonColor: '#15803d' });
+                    appData.cart=[]; toggleCart(); 
+                }
+            } catch(e) { 
+                Swal.fire('เกิดข้อผิดพลาด', String(e), 'error');
+            }
             showLoader(false);
         }
         function getBase64(file) { return new Promise((res, rej) => { const r = new FileReader(); r.readAsDataURL(file); r.onload = () => res(r.result); r.onerror = e => rej(e); }); }
@@ -528,7 +540,10 @@
         function verifyAdminLogin() {
             if(document.getElementById('admin-pin').value === ADMIN_PASS) {
                 isAdminAuthed = true; document.getElementById('admin-login-modal').classList.remove('active'); navigate('admin');
-            } else { alert('รหัสผ่านไม่ถูกต้อง'); document.getElementById('admin-pin').value=''; }
+            } else { 
+                Swal.fire('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง', 'error');
+                document.getElementById('admin-pin').value=''; 
+            }
         }
         function logoutAdmin() { isAdminAuthed = false; navigate('home'); }
 
@@ -582,7 +597,12 @@
             const status = document.getElementById('update-o-status').value;
             showLoader(true);
             const res = await apiCall({ action: 'updateOrderStatus', orderId: id, status: status });
-            if(res.success) { appData.orders.find(x => x.OrderID === id).Status = status; renderAdminOrders(); document.getElementById('order-detail-modal').classList.remove('active'); }
+            if(res.success) { 
+                appData.orders.find(x => x.OrderID === id).Status = status; 
+                renderAdminOrders(); 
+                document.getElementById('order-detail-modal').classList.remove('active'); 
+                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `อัปเดตสถานะสำเร็จ`, showConfirmButton: false, timer: 1500 });
+            }
             showLoader(false);
         }
 
@@ -598,10 +618,14 @@
         async function saveAdminProduct() {
             showLoader(true); const p = { action: 'saveProduct', id: document.getElementById('ap-id').value, name: document.getElementById('ap-name').value, category: document.getElementById('ap-category').value, price: document.getElementById('ap-price').value, imageUrl: document.getElementById('ap-image').value, benefits: document.getElementById('ap-benefits').value, details: document.getElementById('ap-details').value };
             const res = await apiCall(p);
-            if(res.success) { const idx = appData.products.findIndex(x=>x.ID===res.id); p.ID = res.id; p.ImageURL = p.imageUrl; p.Name = p.name; p.Category = p.category; p.Price = p.price; p.Benefits = p.benefits; p.Details = p.details; if(idx>-1) appData.products[idx]=p; else appData.products.push(p); renderAdminProducts(); document.getElementById('admin-product-form').classList.add('hidden'); }
+            if(res.success) { const idx = appData.products.findIndex(x=>x.ID===res.id); p.ID = res.id; p.ImageURL = p.imageUrl; p.Name = p.name; p.Category = p.category; p.Price = p.price; p.Benefits = p.benefits; p.Details = p.details; if(idx>-1) appData.products[idx]=p; else appData.products.push(p); renderAdminProducts(); document.getElementById('admin-product-form').classList.add('hidden'); Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `บันทึกสินค้าสำเร็จ`, showConfirmButton: false, timer: 1500 });}
             showLoader(false);
         }
-        async function deleteProduct(id) { if(!confirm('ลบสินค้านี้?')) return; showLoader(true); const res = await apiCall({action:'deleteProduct', id:id}); if(res.success) { appData.products = appData.products.filter(x=>x.ID!==id); renderAdminProducts(); } showLoader(false); }
+        async function deleteProduct(id) { 
+            const c = await Swal.fire({title:'ยืนยันการลบ?', text:'ต้องการลบสินค้านี้ใช่หรือไม่', icon:'warning', showCancelButton:true, confirmButtonColor:'#d33', cancelButtonColor:'#3085d6', confirmButtonText:'ลบข้อมูล', cancelButtonText:'ยกเลิก'});
+            if(!c.isConfirmed) return; 
+            showLoader(true); const res = await apiCall({action:'deleteProduct', id:id}); if(res.success) { appData.products = appData.products.filter(x=>x.ID!==id); renderAdminProducts(); } showLoader(false); 
+        }
 
         // Admin: Agents
         function renderAdminAgents() {
@@ -611,11 +635,7 @@
         function openAgentForm() { document.getElementById('admin-agent-form').reset(); document.getElementById('aa-id').value=''; document.getElementById('admin-agent-form').classList.remove('hidden'); }
         function editAgent(id) {
             const a = appData.agents.find(x=>x.ID===id); 
-            document.getElementById('aa-id').value=a.ID; 
-            document.getElementById('aa-name').value=a.Name; 
-            document.getElementById('aa-province').value=a.Province; 
-            document.getElementById('aa-phone').value=a.Phone; 
-            document.getElementById('aa-line').value=a.Line; 
+            document.getElementById('aa-id').value=a.ID; document.getElementById('aa-name').value=a.Name; document.getElementById('aa-province').value=a.Province; document.getElementById('aa-phone').value=a.Phone; document.getElementById('aa-line').value=a.Line; 
             document.getElementById('admin-agent-form').classList.remove('hidden');
         }
         async function saveAdminAgent() {
@@ -626,10 +646,15 @@
                 const idx = appData.agents.findIndex(x=>x.ID===res.id);
                 if(idx>-1) appData.agents[idx]=p; else appData.agents.push(p); 
                 renderAdminAgents(); document.getElementById('admin-agent-form').classList.add('hidden'); 
+                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `บันทึกตัวแทนสำเร็จ`, showConfirmButton: false, timer: 1500 });
             }
             showLoader(false);
         }
-        async function deleteAgent(id) { if(!confirm('ลบตัวแทน?')) return; showLoader(true); const res = await apiCall({action:'deleteAgent', id:id}); if(res.success) { appData.agents = appData.agents.filter(x=>x.ID!==id); renderAdminAgents(); } showLoader(false); }
+        async function deleteAgent(id) { 
+            const c = await Swal.fire({title:'ยืนยันการลบ?', text:'ต้องการลบตัวแทนนี้ใช่หรือไม่', icon:'warning', showCancelButton:true, confirmButtonColor:'#d33', cancelButtonColor:'#3085d6', confirmButtonText:'ลบข้อมูล', cancelButtonText:'ยกเลิก'});
+            if(!c.isConfirmed) return;
+            showLoader(true); const res = await apiCall({action:'deleteAgent', id:id}); if(res.success) { appData.agents = appData.agents.filter(x=>x.ID!==id); renderAdminAgents(); } showLoader(false); 
+        }
 
         // Admin: Reviews
         function renderAdminReviews() {
@@ -642,12 +667,7 @@
         function openReviewForm() { document.getElementById('admin-review-form').reset(); document.getElementById('ar-id').value=''; document.getElementById('admin-review-form').classList.remove('hidden'); }
         function editReview(id) {
             const r = appData.reviews.find(x=>x.ID===id); 
-            document.getElementById('ar-id').value=r.ID; 
-            document.getElementById('ar-name').value=r.CustomerName; 
-            document.getElementById('ar-content').value=r.Content; 
-            document.getElementById('ar-rating').value=r.Rating; 
-            document.getElementById('ar-media-type').value=r.MediaType || ''; 
-            document.getElementById('ar-media-url').value=r.MediaURL || ''; 
+            document.getElementById('ar-id').value=r.ID; document.getElementById('ar-name').value=r.CustomerName; document.getElementById('ar-content').value=r.Content; document.getElementById('ar-rating').value=r.Rating; document.getElementById('ar-media-type').value=r.MediaType || ''; document.getElementById('ar-media-url').value=r.MediaURL || ''; 
             document.getElementById('admin-review-form').classList.remove('hidden');
         }
         async function saveAdminReview() {
@@ -658,14 +678,19 @@
                 const idx = appData.reviews.findIndex(x=>x.ID===res.id);
                 if(idx>-1) appData.reviews[idx]=p; else appData.reviews.push(p); 
                 renderAdminReviews(); renderHomeReviews(); document.getElementById('admin-review-form').classList.add('hidden'); 
+                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `บันทึกรีวิวสำเร็จ`, showConfirmButton: false, timer: 1500 });
             }
             showLoader(false);
         }
-        async function deleteReview(id) { if(!confirm('ลบรีวิว?')) return; showLoader(true); const res = await apiCall({action:'deleteReview', id:id}); if(res.success) { appData.reviews = appData.reviews.filter(x=>x.ID!==id); renderAdminReviews(); renderHomeReviews(); } showLoader(false); }
+        async function deleteReview(id) { 
+            const c = await Swal.fire({title:'ยืนยันการลบ?', text:'ต้องการลบรีวิวนี้ใช่หรือไม่', icon:'warning', showCancelButton:true, confirmButtonColor:'#d33', cancelButtonColor:'#3085d6', confirmButtonText:'ลบข้อมูล', cancelButtonText:'ยกเลิก'});
+            if(!c.isConfirmed) return;
+            showLoader(true); const res = await apiCall({action:'deleteReview', id:id}); if(res.success) { appData.reviews = appData.reviews.filter(x=>x.ID!==id); renderAdminReviews(); renderHomeReviews(); } showLoader(false); 
+        }
 
         function fillAdminSettings() { const s = appData.settings; document.getElementById('set-store-name').value = s.store_name || ''; document.getElementById('set-logo-url').value = s.logo_url || ''; document.getElementById('set-admin-email').value = s.admin_email || ''; document.getElementById('set-bank-name').value = s.bank_name || ''; document.getElementById('set-acc-num').value = s.acc_num || ''; document.getElementById('set-acc-name').value = s.acc_name || ''; document.getElementById('set-qr-url').value = s.qr_url || ''; }
-        async function saveGeneralSettings() { showLoader(true); const s = { store_name: document.getElementById('set-store-name').value, logo_url: document.getElementById('set-logo-url').value, admin_email: document.getElementById('set-admin-email').value }; const res = await apiCall({action:'saveSettings', settings: s}); if(res.success) { Object.assign(appData.settings, s); applySettings(); alert('บันทึกสำเร็จ'); } showLoader(false); }
-        async function savePaymentSettings() { showLoader(true); const s = { bank_name: document.getElementById('set-bank-name').value, acc_num: document.getElementById('set-acc-num').value, acc_name: document.getElementById('set-acc-name').value, qr_url: document.getElementById('set-qr-url').value }; const res = await apiCall({action:'saveSettings', settings: s}); if(res.success) { Object.assign(appData.settings, s); applySettings(); alert('บันทึกสำเร็จ'); } showLoader(false); }
+        async function saveGeneralSettings() { showLoader(true); const s = { store_name: document.getElementById('set-store-name').value, logo_url: document.getElementById('set-logo-url').value, admin_email: document.getElementById('set-admin-email').value }; const res = await apiCall({action:'saveSettings', settings: s}); if(res.success) { Object.assign(appData.settings, s); applySettings(); Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `บันทึกสำเร็จ`, showConfirmButton: false, timer: 1500 }); } showLoader(false); }
+        async function savePaymentSettings() { showLoader(true); const s = { bank_name: document.getElementById('set-bank-name').value, acc_num: document.getElementById('set-acc-num').value, acc_name: document.getElementById('set-acc-name').value, qr_url: document.getElementById('set-qr-url').value }; const res = await apiCall({action:'saveSettings', settings: s}); if(res.success) { Object.assign(appData.settings, s); applySettings(); Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `บันทึกสำเร็จ`, showConfirmButton: false, timer: 1500 }); } showLoader(false); }
 
         function loadMockData() {
             appData.products = [{ID:'P1',Name:'ปฐพีธารา ทุเรียน',Category:'ทุเรียน',Price:890,Benefits:'ฟื้นต้นไว แตกยอดดี',Details:'...',ImageURL:'https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png'}];
