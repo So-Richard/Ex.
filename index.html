@@ -8,7 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="โกดังปฐพีธารา">
+    <meta name="apple-mobile-web-app-title" content="ปฐพีธารา">
     <meta name="theme-color" content="#15803d">
     
     <link rel="manifest" id="manifest-link" href="data:application/manifest+json;base64,eyJuYW1lIjoi4LmC4LiB4LiU4Lix4LiH4Lib4LiQ4Lie4Li14LiY4Liy4Lij4LiyIiwic2hvcnRfbmFtZSI6IuC4m+C4kOC4nuC4teC4mOC4suC4o+C4siIsInN0YXJ0X3VybCI6Ii4vIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiI2YwZmRmNCIsInRoZW1lX2NvbG9yIjoiIzE1ODAzZCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL2ltZzEucGljLmluLnRoL2ltYWdlcy8zNTFhNzBiMTQ4MGNjZTEwMWJlMTkwZGYzMTZjOGVhZXMucG5nIiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3BuZyJ9LHsic3JjIjoiaHR0cHM6Ly9pbWcxLnBpYy5pbi50aC9pbWFnZXMvMzUxYTcwYjE0ODBjY2UxMDFiZTE5MGRmMzE2YzhlYWVzLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV19">
@@ -174,8 +174,8 @@
                     <h2 class="text-xl font-bold"><i class="fas fa-cogs mr-2 text-ptgold"></i> ระบบจัดการหลังบ้าน</h2>
                     <button onclick="logoutAdmin()" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-sm font-bold shadow transition"><i class="fas fa-sign-out-alt mr-1"></i> ออกจากระบบ</button>
                 </div>
-                <div class="flex flex-col lg:flex-row relative">
-                    <div class="w-full lg:w-64 flex-none bg-gray-100 border-r p-4 flex flex-row lg:flex-col gap-2 overflow-x-auto hide-scrollbar z-10">
+                <div class="flex flex-col md:flex-row relative">
+                    <div class="w-full md:w-64 md:min-w-[16rem] flex-shrink-0 bg-gray-100 border-r p-4 flex flex-row md:flex-col gap-2 overflow-x-auto hide-scrollbar z-10">
                         <button onclick="switchAdminTab('dashboard')" id="tab-btn-dashboard" class="admin-nav bg-ptgreen text-white px-4 py-3 rounded-lg text-sm font-bold text-left whitespace-nowrap shadow flex-shrink-0"><i class="fas fa-chart-line w-6 text-center"></i> ภาพรวม</button>
                         <button onclick="switchAdminTab('orders')" id="tab-btn-orders" class="admin-nav bg-transparent text-gray-600 hover:bg-gray-200 px-4 py-3 rounded-lg text-sm font-bold text-left whitespace-nowrap transition flex-shrink-0"><i class="fas fa-clipboard-list w-6 text-center"></i> คำสั่งซื้อ</button>
                         <button onclick="switchAdminTab('products')" id="tab-btn-products" class="admin-nav bg-transparent text-gray-600 hover:bg-gray-200 px-4 py-3 rounded-lg text-sm font-bold text-left whitespace-nowrap transition flex-shrink-0"><i class="fas fa-box w-6 text-center"></i> สินค้า</button>
@@ -374,36 +374,32 @@
         window.onload = async () => {
             showLoader(true, 'เชื่อมต่อฐานข้อมูลปฐพีธารา...');
             try {
-                if(GAS_API_URL === 'https://script.google.com/macros/s/AKfycbwAopNW-4WH4qIjKFZ9M612ftFjXoGUk_zhkWUUwf3mEFviyY2D-jL6ya8odN8pxA7V/exec') { console.warn('Offline Mode'); loadMockData(); }
-                else {
-                    const data = await apiCall({ action: 'getInitialData' });
-                    if(data.success) {
-                        appData.products = data.products || [];
-                        appData.agents = data.agents || [];
-                        appData.reviews = data.reviews || [];
-                        appData.settings = data.settings || {};
-                        appData.orders = data.orders || [];
-                    } else {
-                        throw new Error(data.message || 'API Load Error');
-                    }
+                const data = await apiCall({ action: 'getInitialData' });
+                if(data.success) {
+                    appData.products = data.products || [];
+                    appData.agents = data.agents || [];
+                    appData.reviews = data.reviews || [];
+                    appData.settings = data.settings || {};
+                    appData.orders = data.orders || [];
+                } else {
+                    throw new Error(data.message || 'API Load Error');
                 }
+                
                 applySettings(); renderProducts(); renderAgents(); renderHomeReviews();
             } catch(e) { 
                 console.error(e); 
                 Swal.fire({
                     icon: 'error',
                     title: 'ข้อผิดพลาด',
-                    text: 'ไม่สามารถโหลดข้อมูลได้ (อาจตั้งค่า App Script ไม่ถูกต้อง) ระบบจะแสดงข้อมูลจำลอง',
+                    text: 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาลองใหม่อีกครั้ง',
                     confirmButtonColor: '#15803d'
                 });
-                loadMockData(); // ระบบทำงานจำลองเมื่อ API พัง
                 applySettings(); renderProducts(); renderAgents(); renderHomeReviews();
             }
             showLoader(false);
         };
 
         async function apiCall(payload) {
-            // เพิ่ม header text/plain เพื่อกัน CORS blocked ตอนยิง fetch POST
             const res = await fetch(GAS_API_URL, { 
                 redirect: 'follow',
                 method: 'POST', 
@@ -439,6 +435,25 @@
             if(logoUrl) {
                 document.getElementById('nav-logo').src = logoUrl; 
                 document.getElementById('hero-logo').src = logoUrl; 
+                document.getElementById('dynamic-favicon').href = logoUrl;
+                
+                document.querySelectorAll('link[rel="apple-touch-icon"]').forEach(el => el.href = logoUrl);
+                
+                const manifestData = {
+                    "name": s.store_name || "โกดังปฐพีธารา",
+                    "short_name": s.store_name || "ปฐพีธารา",
+                    "start_url": "./",
+                    "display": "standalone",
+                    "background_color": "#f0fdf4",
+                    "theme_color": "#15803d",
+                    "icons": [
+                        { "src": logoUrl, "sizes": "192x192", "type": "image/png" },
+                        { "src": logoUrl, "sizes": "512x512", "type": "image/png" }
+                    ]
+                };
+                
+                const manifestStr = encodeURIComponent(JSON.stringify(manifestData));
+                document.getElementById('manifest-link').href = 'data:application/manifest+json;charset=utf-8,' + manifestStr;
             }
 
             document.getElementById('checkout-bank').innerText = s.bank_name || '-';
@@ -611,17 +626,14 @@
                     slipBase64: base64 
                 };
                 
-                if(GAS_API_URL !== 'https://script.google.com/macros/s/AKfycbwAopNW-4WH4qIjKFZ9M612ftFjXoGUk_zhkWUUwf3mEFviyY2D-jL6ya8odN8pxA7V/exec') {
-                    const res = await apiCall(payload);
-                    if(res.success) {
-                        Swal.fire({ icon: 'success', title: 'สั่งซื้อสำเร็จ!', text: 'รหัสอ้างอิง: ' + res.orderId, confirmButtonColor: '#15803d' });
-                        appData.cart = []; updateCartUI(); toggleCart();
-                        document.getElementById('checkout-form').reset(); document.getElementById('file-name').innerText='ยังไม่ได้เลือกไฟล์';
-                        navigate('home');
-                    }
-                } else { 
-                    Swal.fire({ icon: 'success', title: 'โหมดจำลอง', text: 'จำลองสั่งซื้อสำเร็จ', confirmButtonColor: '#15803d' });
-                    appData.cart=[]; toggleCart(); document.getElementById('checkout-form').reset();
+                const res = await apiCall(payload);
+                if(res.success) {
+                    Swal.fire({ icon: 'success', title: 'สั่งซื้อสำเร็จ!', text: 'รหัสอ้างอิง: ' + res.orderId, confirmButtonColor: '#15803d' });
+                    appData.cart = []; updateCartUI(); toggleCart();
+                    document.getElementById('checkout-form').reset(); document.getElementById('file-name').innerText='ยังไม่ได้เลือกไฟล์';
+                    navigate('home');
+                } else {
+                    throw new Error(res.message || 'ไม่สามารถบันทึกคำสั่งซื้อได้');
                 }
             } catch(e) { 
                 Swal.fire('เกิดข้อผิดพลาด', String(e), 'error');
@@ -810,15 +822,6 @@
             const res = await apiCall({action:'saveSettings', settings: s}); 
             if(res.success) { Object.assign(appData.settings, s); applySettings(); Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `บันทึกข้อมูลชำระเงินสำเร็จ`, showConfirmButton: false, timer: 1500 }); } 
             showLoader(false); 
-        }
-
-        // Mock Data สำหรับเปิดในเครื่องโดยไม่มี API
-        function loadMockData() {
-            appData.products = [{ID:'P1',Name:'ปฐพีธารา บำรุงพืช',Price:890,Benefits:'ฟื้นต้นไว แตกยอดดี',Details:'อาหารเสริมพืชปฐพีธารา บำรุงลึกถึงระดับเซลล์...',ImageURL:'https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png'}];
-            appData.agents = [{ID:'A1',Name:'ร้านสมหมาย',Province:'ชลบุรี',Phone:'081-xxx',Line:'@sm'}];
-            appData.reviews = [{ID:'R1',CustomerName:'คุณใจดี',Content:'แตกยอดดีมาก ใช้แล้วใบเขียวเข้ม ทุเรียนสมบูรณ์มากครับ',Rating:5, MediaURL:'https://images.unsplash.com/photo-1634467524884-897d0af5e124?q=80&w=400&auto=format&fit=crop', MediaType:'image'}];
-            appData.orders = [{OrderID:'ORD001',Date:'2/4/2026',CustomerName:'ลุงประยุทธ์',Address:'บ้าน',Province:'ระยอง',Items:'[{"name":"ทุเรียน","qty":1,"price":890}]',Total:890,SlipURL:'',Status:'Pending'}];
-            appData.settings = { store_name:'โกดังปฐพีธารา', logo_url:'https://img1.pic.in.th/images/351a70b1480cce101be190df316c8eae.png', bank_name:'กสิกรไทย', acc_num:'123-456', acc_name:'บจก.'};
         }
     </script>
 </body>
